@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrianna & Michał - 16 lipca 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Text:wght@400;600&display=swap');
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(to bottom, #f8f6f0, #f5f3ed);
+            color: #5a5a5a;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid #f0f0f0;
+        }
+
+        .save-the-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8b8b8b;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .names {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #4a4a4a;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .date-display {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.5rem;
+            color: #6a6a6a;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .time-unit {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .time-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            display: block;
+            color: #4a4a4a;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-label {
+            font-family: 'Crimson Text', serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8b8b8b;
+            font-weight: 400;
+        }
+
+        .location {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.1rem;
+            color: #7a7a7a;
+            margin-top: 3rem;
+            font-style: italic;
+        }
+
+        .today-message {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #4a4a4a;
+            font-weight: 700;
+            margin: 2rem 0;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: #d0d0d0;
+            margin: 2rem auto;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 3rem 1.5rem;
+            }
+            
+            .names {
+                font-size: 2rem;
+            }
+            
+            .date-display {
+                font-size: 1.3rem;
+            }
+            
+            .time-number {
+                font-size: 2.5rem;
+            }
+            
+            .today-message {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <div class="save-the-date">Save the date</div>
+        
+        <div class="names">ADRIANNA & MICHAŁ</div>
+        
+        <div class="date-display">16 lipca 2026</div>
+        
+        <div class="divider"></div>
+        
+        <div class="countdown" id="countdown">
+            <div class="time-unit">
+                <span class="time-number" id="days">000</span>
+                <span class="time-label">Dni</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="hours">00</span>
+                <span class="time-label">Godzin</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="minutes">00</span>
+                <span class="time-label">Minut</span>
+            </div>
+            <div class="time-unit">
+                <span class="time-number" id="seconds">00</span>
+                <span class="time-label">Sekund</span>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="location">Willa Słoneczna, Dębowiec</div>
+    </div>
+
+    <script>
+        // Data docelowa: 16 lipca 2026, 00:00:00
+        const targetDate = new Date('2026-07-16T00:00:00').getTime();
+        const mainContainer = document.getElementById('main-container');
+        let interval; // Zmienna do przechowywania interwału, aby go wyczyścić
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                // Jeśli czas do ślubu minął
+                const weddingDayEnd = new Date('2026-07-17T00:00:00').getTime();
+                
+                if (now < weddingDayEnd) {
+                    // Jeśli jest dzień ślubu (16 lipca)
+                    mainContainer.innerHTML = `
+                        <div class="names">ADRIANNA & MICHAŁ</div>
+                        <div class="divider"></div>
+                        <div class="today-message">To już dziś!</div>
+                        <div class="divider"></div>
+                        <div class="location">Willa Słoneczna, Dębowiec</div>
+                    `;
+                    if (interval) clearInterval(interval); // Zatrzymujemy odliczanie, bo już nie jest potrzebne
+                    return;
+                } else {
+                    // Jeśli jest już po dniu ślubu, zaczynamy liczyć w górę
+                    countUpFromWedding();
+                    // Uruchamiamy nową pętlę do liczenia w górę
+                    if (interval) clearInterval(interval);
+                    interval = setInterval(countUpFromWedding, 1000);
+                    return; // Kończymy, aby nie wykonywać reszty kodu funkcji
+                }
+            }
+
+            // Obliczenia czasu do ślubu
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Aktualizacja wyświetlania
+            document.getElementById('days').textContent = days.toString().padStart(3, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        function countUpFromWedding() {
+            const weddingDayStart = new Date('2026-07-16T00:00:00').getTime();
+            const now = new Date().getTime();
+            const timeSinceWedding = now - weddingDayStart;
+
+            const days = Math.floor(timeSinceWedding / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeSinceWedding % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeSinceWedding % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeSinceWedding % (1000 * 60)) / 1000);
+
+            // Zmieniamy całą zawartość kontenera, aby mieć pewność, że struktura HTML jest poprawna
+            mainContainer.innerHTML = `
+                <div class="save-the-date">Jesteśmy po ślubie</div>
+                <div class="names">ADRIANNA & MICHAŁ</div>
+                <div class="date-display">od 16 lipca 2026</div>
+                <div class="divider"></div>
+                <div class="countdown" id="countdown">
+                    <div class="time-unit">
+                        <span class="time-number">${days.toString().padStart(3, '0')}</span>
+                        <span class="time-label">Dni</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number">${hours.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Godzin</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number">${minutes.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Minut</span>
+                    </div>
+                    <div class="time-unit">
+                        <span class="time-number">${seconds.toString().padStart(2, '0')}</span>
+                        <span class="time-label">Sekund</span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="location">Willa Słoneczna, Dębowiec</div>
+            `;
+        }
+
+        // Uruchomienie odliczania
+        updateCountdown();
+        interval = setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
